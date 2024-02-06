@@ -1,12 +1,12 @@
 """
 This file defines various common metrics of interest.
 """
-import random
 from typing import Optional, Sequence, Set
 
 import numpy as np
 
 from evals.record import Event
+import secrets
 
 
 def get_accuracy(events: Sequence[Event]) -> float:
@@ -23,7 +23,7 @@ def get_accuracy(events: Sequence[Event]) -> float:
 
 def get_bootstrap_accuracy_std(events: Sequence[Event], num_samples: int = 1000):
     vals = [m.data["correct"] for m in events]
-    return np.std([np.mean(random.sample(vals, len(vals) // 2)) for _ in range(1000)])
+    return np.std([np.mean(secrets.SystemRandom().sample(vals, len(vals) // 2)) for _ in range(1000)])
 
 
 def get_confusion_matrix(

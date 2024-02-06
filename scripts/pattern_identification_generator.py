@@ -3,8 +3,9 @@
 """
 
 import json
-import random
-random.seed(42)
+import secrets
+
+secrets.SystemRandom().seed(42)
 
 SYMBOLS = list("abcdefghijklmnopqrstuvwxyz")
 DELIMETER = "->"
@@ -14,8 +15,8 @@ TASK_NAME = "pattern_identification"
 
 def generate_example():
     num_symbols = int(len(SYMBOLS) / 2)
-    target_symbol = random.choice(SYMBOLS)
-    symbol_list = random.sample(SYMBOLS, num_symbols)
+    target_symbol = secrets.SystemRandom().choice(SYMBOLS)
+    symbol_list = secrets.SystemRandom().sample(SYMBOLS, num_symbols)
     target = "foo" if target_symbol in symbol_list else "bar"
     return (target_symbol, symbol_list, target)
 

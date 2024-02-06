@@ -15,6 +15,7 @@ from tqdm import tqdm
 from .base import ModelSpec, ModelSpecs
 from .record import RecorderBase
 from .registry import Registry
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ _MAX_SAMPLES = None
 def _index_samples(samples: List[Any]) -> List[Tuple[Any, int]]:
     """Shuffle `samples` and pair each sample with its index."""
     indices = list(range(len(samples)))
-    random.Random(SHUFFLE_SEED).shuffle(indices)
+    secrets.SystemRandom().Random(SHUFFLE_SEED).shuffle(indices)
     if _MAX_SAMPLES is not None:
         indices = indices[:_MAX_SAMPLES]
     logger.info(f"Evaluating {len(indices)} samples")
@@ -128,7 +129,7 @@ class Eval(abc.ABC):
             with recorder.as_default_recorder(sample_id):
                 recorder.record_raw(sample)
                 seed = f"{sample_id}:{self.seed}".encode("utf-8")
-                rng = random.Random(seed)
+                rng = secrets.SystemRandom().Random(seed)
                 return idx, self.eval_sample(sample, rng)
 
         def worker_thread(args):
